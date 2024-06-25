@@ -19,6 +19,21 @@ export async function GET(request : Request){
 
         //validation with Zod
        const result = UsernameQuerySchema.safeParse(queryParam)
+       console.log(result) //Remove at the end 
+       if(!result.success){
+         const UsernameErrors = result.error.format().username?._errors || []
+         return Response.json({
+                success: false,
+                message: "Invalid username",
+                errors: UsernameErrors
+            },
+            {
+                status: 400
+            
+         })
+       }
+       
+
         
     } catch (error) {
         console.error("Error checking username",error)
