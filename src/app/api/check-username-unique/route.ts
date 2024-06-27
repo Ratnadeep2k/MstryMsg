@@ -9,6 +9,17 @@ const UsernameQuerySchema = z.object({
 })
 
 export async function GET(request : Request){
+    //Todo : use this  in all other route 
+    // if(request.method != 'GET'){
+    //     return Response.json({
+    //         success: false,
+    //         message: "Invalid method"
+    //     },
+    //     {
+    //         status: 405
+    //     }
+    // )
+    // }
     await dbConnect()
 
     try {
@@ -49,7 +60,7 @@ export async function GET(request : Request){
             success: true,
             message: "Username is available"
         })
-        
+
     } catch (error) {
         console.error("Error checking username",error)
         return Response.json({
