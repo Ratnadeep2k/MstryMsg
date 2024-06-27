@@ -32,6 +32,8 @@ export async function GET(request : Request){
             
          })
        }
+
+       const {username} = result.data
        
 
         
