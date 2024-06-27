@@ -59,3 +59,51 @@ export async function POST(request :Request){
    }
 
 } 
+
+export async function GET(request : Request){
+
+     await dbConnect()
+    const session =  await getServerSession(authOptions) // currently login user
+    const user = session?.user as User //user has all data  collecting from session
+    if (!session || !session.user) {
+        return {
+            status: 401,
+            body: { error: 'Not authorized' }
+        }
+    }
+   const userId = user._id;
+   try {
+    
+    const foundUser = await UserModel.findById(userId);
+   if (!foundUser) {
+    return Response.json({
+      success :false,
+          message : "user not found"
+    },
+    {
+          status : 500
+    }
+  )
+
+  
+}
+return Response.json({
+    success : true ,
+    message : "successfully found user",
+    isAcceptingMessages : foundUser.isAcceptingMessage
+    },
+    {
+        status : 200
+    }
+)
+   } catch (error) {
+    
+    console.log("error of geting accepting messages ",error)
+    return Response.json({
+       success :false,
+           message : "Error in getting message accepting status"
+    },
+    {status : 500}
+   )
+   }
+}
