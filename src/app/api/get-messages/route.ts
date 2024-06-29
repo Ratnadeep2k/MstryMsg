@@ -55,7 +55,14 @@ export async function GET(request : Request){
     )
     
    } catch (error) {
-    
+    console.log("Unexpected error occured", error)
+    return Response.json({
+        success : false,
+        message : "Not Authenticate"
+      },
+      {
+        status : 500,
+    })
    }
 
 }
