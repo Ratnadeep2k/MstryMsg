@@ -53,10 +53,56 @@ import { ApiResponse } from "@/types/ApiResponse"
     }
     checkUsernameUnique()
   },[debouncedUsername])
+
+  const onSubmit = async(data : z.infer<typeof signUpSchema>)=>{
+
+
+    setIsSubmitting(true)
+    try {
+      const response = await axios.post<ApiResponse>('/api/sign-up',data)
+      toast({
+        title: 'Success',
+
+        description:response.data.message
+        
+      })
+      router.replace(`/verify/${username}`)
+      setIsSubmitting(false)
+
+    } catch (error) {
+      
+      console.error("Error in Signup",error)
+      const axiosError = error as AxiosError<ApiResponse>
+      let errorMessage  = axiosError.response?.data.message
+
+      toast({
+        title:'Error',
+        description:errorMessage,
+        variant:'destructive'
+      })
+      setIsSubmitting(false);
+
+    }
+
+
+
+  }
   
     return(
-        <div>
-            <h1>Sign In</h1>
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+
+          <div  className ='w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md' >
+            <div className="text-center">
+              <h1 className ='text-4xl font-extrabold tracking-tight lg:text-5xl mb-6'>
+               Join Mystery Messaage
+              </h1>
+              <p className ='mb-4'>
+                Sign up to start your anonymous adventure
+              </p>
+
+            </div>
+
+          </div>
         </div>
     )
 }
