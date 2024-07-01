@@ -123,7 +123,7 @@ const page = () => {
                     }}
                   />
                   {isCheckingUsername && <Loader2 className="animate-spin" />}
-                  {!isCheckingUsername && usernameMessage && (
+                  {/* {!isCheckingUsername && usernameMessage && (
                     <p
                       className={`text-sm ${
                         usernameMessage === 'Username is unique'
@@ -133,7 +133,7 @@ const page = () => {
                     >
                       {usernameMessage}
                     </p>
-                  )}
+                  )} */}
                   <FormMessage />
                 </FormItem>
               )}
