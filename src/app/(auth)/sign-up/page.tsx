@@ -115,7 +115,7 @@ const page = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
-                  <Input
+                  <Input placeholder="username"
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
