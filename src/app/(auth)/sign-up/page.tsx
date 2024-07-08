@@ -184,6 +184,7 @@ const page = () => {
           </div>
       </div>
     </div>
+    
   )
 }
 export default page
