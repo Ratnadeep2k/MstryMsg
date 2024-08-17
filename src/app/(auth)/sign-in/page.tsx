@@ -61,7 +61,7 @@ const signin = () => {
     }
     } 
      if(result?.url){
-      router.replace('/dashboard');
+      router.replace('/dashboard_test');
      }
     }
 
