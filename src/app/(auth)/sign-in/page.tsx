@@ -40,11 +40,25 @@ const signin = () => {
       password:data.password
     })
     if(result?.error){
-      toast({
-        title: 'Sign In Failed',
-        description: result.error,
-        variant: 'destructive'
+      // toast({
+      //   title: 'Sign In Failed',
+      //   description: result.error,
+      //   variant: 'destructive'
+      // }) 
+      if(result.error =='CredentialsSignIn' ){
+        toast({
+          title: 'Sign In Failed',
+          description: 'Invalid Credentials',
+          variant: 'destructive'
+        })
+      }
+      else{
+        toast({
+          title: 'Sign In Failed',
+          description: result.error,
+          variant: 'destructive'
       })
+    }
     } 
      if(result?.url){
       router.replace('/dashboard');
@@ -62,7 +76,6 @@ const signin = () => {
           <p className='mb-4'>
             Sign in to start your anonymous adventure
           </p>
-
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
