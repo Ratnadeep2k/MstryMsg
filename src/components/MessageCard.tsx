@@ -38,8 +38,8 @@ function MessageCard({message,onMessageDelete}:MessaageCardProps) {
       toast({
             title: response.data.message,
         
-      })
-        onMessageDelete(message._id) 
+      });
+      onMessageDelete(message._id);
     }
 
     return ( 
