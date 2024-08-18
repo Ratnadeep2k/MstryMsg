@@ -43,10 +43,11 @@ export async function DELETE(request : Request,{params}:{params:{messageid:strin
   )
 }
 
-  catch{
-    return Response.json({
-      success:false,
-      message:"Unexpected error occured"
+  catch (error){
+        console.log("Unexpected error occured in delete route")
+        return Response.json({
+        success:false,
+        message:"Unexpected error occured"
     },{
       status:500
     }
