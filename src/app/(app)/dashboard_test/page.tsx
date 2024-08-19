@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 function dashboard() {
   const [messages,setMessages] = useState<Message[]>([])
   const [loading,setIsLoading] = useState(false);
+  const [isSwitchLoading,setIswitchLoading] = useState(false)
   const {toast} = useToast()
   //optimistic UI
 
@@ -42,7 +43,7 @@ function dashboard() {
        
     }
     finally{
-      setIsLoading(false);
+    setIswitchLoading(false);
     }
 
 
@@ -50,6 +51,37 @@ function dashboard() {
 
 
   },[setValue])
+
+  const fetchMessages = useCallback( async(refresh:boolean = false)=>{
+    setIsLoading(true)
+    setIswitchLoading(false)
+    try{
+      const response = await axios.get<ApiResponse>('/api/get-messages')
+      setMessages(response.data.messages || [])
+      if(refresh){
+        toast({
+          title : 'Refreshed Messages',
+          description : 'Showing latest Messages',
+        }
+        )
+      }
+    }
+    catch(error){
+      const axiosError = error as AxiosError<ApiResponse>;
+      toast({
+        title : 'Failed to fetch messages',
+        description : axiosError.response?.data.message || axiosError.message || 'Failed to fetch msg',
+        variant :"destructive"
+      })
+
+    }
+    finally{
+      setIsLoading(false)
+      setIswitchLoading(false)
+    }
+   
+  },[setIsLoading,setMessages])
+
 
   return (
     <div>page</div>
