@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
 import { APIResource } from 'openai/resource.mjs';
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 
 function dashboard() {
@@ -81,6 +81,34 @@ function dashboard() {
     }
    
   },[setIsLoading,setMessages])
+
+  useEffect(()=>{
+    if(!session || !session.user) return
+    fetchMessages()
+    fetchAcceptMessage()
+  },[session,setValue,fetchAcceptMessage,fetchMessages])
+  //handle switch change 
+  const handleSwitchChange = async()=>{
+    try {
+       const response = await axios.post<ApiResponse>('/api/accept-messages',
+        {
+          acceptMessages:!acceptMessages
+        });
+       setValue('acceptMessages',!acceptMessages)
+        toast({
+          title : response.data.message,
+          variant : 'default'
+        })
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiResponse>;
+      toast({
+        title : 'Failed to update accept messages',
+        description : axiosError.response?.data.message || axiosError.message || 'Failed to update msg',
+        variant :"destructive"
+      })
+      
+    }
+  }
 
 
   return (
