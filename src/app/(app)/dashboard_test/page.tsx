@@ -3,9 +3,12 @@
 import { useToast } from '@/components/ui/use-toast';
 import { Message } from '@/model/User'
 import { acceptMessageSchema } from '@/schemas/acceptMessageSchema';
+import { ApiResponse } from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios, { AxiosError } from 'axios';
 import { useSession } from 'next-auth/react';
-import React, { useState } from 'react'
+import { APIResource } from 'openai/resource.mjs';
+import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form';
 
 function dashboard() {
@@ -24,7 +27,30 @@ function dashboard() {
 
   const {register,watch,setValue} = form; 
   const acceptMessages = watch('acceptMessages')
-  
+  const fetchAcceptMessage = useCallback(async()=>{
+    setIsLoading(true)
+    try {
+       const response = await axios.get('/api/accept-messages')
+       setValue('acceptMessages ',response.data.isAcceptingMessage)
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiResponse>;
+      toast({
+        title : 'Failed to fetch accept messages',
+        description : axiosError.response?.data.message || axiosError.message || 'Failed to accept msg',
+        variant :"destructive"
+      })
+       
+    }
+    finally{
+      setIsLoading(false);
+    }
+
+
+
+
+
+  },[setValue])
+
   return (
     <div>page</div>
   )
