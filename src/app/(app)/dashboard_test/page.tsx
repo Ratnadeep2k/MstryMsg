@@ -21,6 +21,10 @@ function dashboard() {
   const form = useForm({
     resolver:zodResolver(acceptMessageSchema)
   })
+
+  const {register,watch,setValue} = form; 
+  const acceptMessages = watch('acceptMessages')
+  
   return (
     <div>page</div>
   )
