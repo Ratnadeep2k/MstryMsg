@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
 import MessageCard from '@/components/MessageCard';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/components/ui/use-toast';
-import { Message, User } from '@/model/User'
-import { acceptMessageSchema } from '@/schemas/acceptMessageSchema';
+import { Message } from '@/model/User';
 import { ApiResponse } from '@/types/ApiResponse';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios, { AxiosError } from 'axios';
 import { Loader2, RefreshCcw } from 'lucide-react';
+import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
-import { APIResource } from 'openai/resource.mjs';
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { acceptMessageSchema  } from '@/schemas/acceptMessageSchema';
 
-function Dashboard() {
+function UserDashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
@@ -30,7 +30,7 @@ function Dashboard() {
   const { data: session } = useSession();
 
   const form = useForm({
-    resolver: zodResolver(acceptMessageSchema),
+    resolver: zodResolver(acceptMessageSchema ),
   });
 
   const { register, watch, setValue } = form;
@@ -40,7 +40,7 @@ function Dashboard() {
     setIsSwitchLoading(true);
     try {
       const response = await axios.get<ApiResponse>('/api/accept-messages');
-      setValue('acceptMessages', response.data.isAcceptingMessage);
+      setValue('acceptMessages', response.data.isAcceptingMessages);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -180,7 +180,8 @@ function Dashboard() {
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {messages.length > 0 ? (
           messages.map((message, index) => (
-            <MessageCard 
+            <MessageCard
+              key={message._id || index}
               message={message}
               onMessageDelete={handleDeleteMessage}
             />
@@ -193,4 +194,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default UserDashboard;
